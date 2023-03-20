@@ -180,12 +180,12 @@ async fn apply_sero_instance(sero_config: &SeroConfig) -> Result<()> {
     let configmap = ConfigMap {
         data: Some(
             BTreeMap::from([
-                (String::from("service"), sero_config.service.clone()),
-                (String::from("inject"), sero_config.service_inject.to_string()),
-                (String::from("deployment"), sero_config.deployment.clone()),
-                (String::from("timeout_forward"), sero_config.timeout_forward_ms.to_string()),
-                (String::from("timeout_scale_up"), sero_config.timeout_scale_up_ms.to_string()),
-                (String::from("timeout_scale_down"), sero_config.timeout_scale_down_ms.to_string()),
+                ("deployment".to_uppercase(), sero_config.deployment.clone()),
+                ("service".to_uppercase(), sero_config.service.clone()),
+                ("inject".to_uppercase(), sero_config.service_inject.to_string()),
+                ("timeout_forward".to_uppercase(), sero_config.timeout_forward_ms.to_string()),
+                ("timeout_scale_up".to_uppercase(), sero_config.timeout_scale_up_ms.to_string()),
+                ("timeout_scale_down".to_uppercase(), sero_config.timeout_scale_down_ms.to_string()),
             ]),
         ),
         metadata: ObjectMeta {
