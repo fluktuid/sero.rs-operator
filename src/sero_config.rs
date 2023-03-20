@@ -1,13 +1,6 @@
 use serde::{Deserialize, Serialize};
-use thiserror::Error;
 use anyhow::bail;
 use tracing::warn;
-
-#[derive(Error, Debug)]
-pub enum FormatError {
-    #[error("Missing attribute: {0}")]
-    MissingAttribute(String),
-}
 
 #[derive(Debug, PartialEq)]
 #[derive(Serialize, Deserialize)]
@@ -23,11 +16,6 @@ pub struct SeroConfig {
 }
 
 impl SeroConfig {
-    // This method will help users to discover the builder
-    pub fn builder() -> SeroConfigBuilder {
-      SeroConfigBuilder::default()
-    }
-
     pub fn name_patern(&self) -> String {
         format!("sero-{}", self.deployment)
     }
@@ -49,7 +37,6 @@ impl Default for SeroConfig {
 
 #[derive(Default)]
 pub struct SeroConfigBuilder {
-    // Probably lots of optional fields.
     image: Option<String>,
     service: Option<String>,
     service_inject: bool,
@@ -61,7 +48,6 @@ pub struct SeroConfigBuilder {
 
 impl SeroConfigBuilder {
     pub fn new() -> SeroConfigBuilder {
-        // Set the minimally required fields of Foo.
         SeroConfigBuilder {
             service: None,
             deployment: None,

@@ -5,7 +5,6 @@ use serde::{Deserialize, Serialize};
 #[derive(Serialize, Deserialize)]
 #[derive(Clone)]
 pub struct Settings {
-    // Lots of complicated fields.
     pub namespaces: Vec<String>,
     pub default_config: DefaultSeroConfig,
 }
