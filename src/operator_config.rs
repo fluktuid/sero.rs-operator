@@ -6,6 +6,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone)]
 pub struct Settings {
     pub namespaces: Vec<String>,
+    #[serde(rename = "defaultConfig")]
     pub default_config: DefaultSeroConfig,
 }
 
@@ -17,9 +18,19 @@ pub struct DefaultSeroConfig {
     pub inject: bool,
     pub protocol: String,
     pub port: i64,
-    pub timeout_forward_ms: i64,
-    pub timeout_scale_up_ms: i64,
-    pub timeout_scale_down_ms: i64,
+    pub timeout: Timeout,
+}
+
+#[derive(Debug, PartialEq)]
+#[derive(Serialize, Deserialize)]
+#[derive(Clone)]
+pub struct Timeout {
+    #[serde(rename = "forward")]
+    pub forward_ms: i64,
+    #[serde(rename = "scaleUp")]
+    pub scale_up_ms: i64,
+    #[serde(rename = "scaleDown")]
+    pub scale_down_ms: i64,
 }
 
 const CONFIG_FILE_PREFIX: &str = "./config.yaml";
@@ -47,9 +58,11 @@ impl Default for Settings {
                 inject: true,
                 protocol: String::from("TCP"),
                 port: 80,
-                timeout_forward_ms: 2000,
-                timeout_scale_up_ms: 7000,
-                timeout_scale_down_ms: 7000,
+                timeout: Timeout {
+                    forward_ms: 2000,
+                    scale_up_ms: 7000,
+                    scale_down_ms: 7000,
+                }
             }
         }
     }

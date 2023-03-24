@@ -309,9 +309,9 @@ fn to_config(annotations: BTreeMap<String, String>, name: String, default: Defau
         .inject(default.inject)
         //.protocol(default.protocol)
         //.port(default.port)
-        .timeout_forward(default.timeout_forward_ms)
-        .timeout_scale_up(default.timeout_scale_up_ms)
-        .timeout_scale_down(default.timeout_scale_down_ms);
+        .timeout_forward(default.timeout.forward_ms)
+        .timeout_scale_up(default.timeout.scale_up_ms)
+        .timeout_scale_down(default.timeout.scale_down_ms);
     for (k, v) in annotations.into_iter() {
         builder = match k.to_lowercase().as_str() {
             "beta.v1.sero/service" => {builder.service(v)}
