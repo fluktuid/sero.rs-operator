@@ -42,10 +42,6 @@ impl AnnotationWatcher {
     t
   }
 
-  pub async fn add_ns(&mut self, name: String) {
-    self.spawn_inner(name).await;
-  }
-
   pub async fn remove_ns(&self, name: String) {
     match self.handler.read().await.get(&name) {
         Some(v) => {v.abort();},
@@ -53,16 +49,19 @@ impl AnnotationWatcher {
     }
   }
 
-  async fn spawn_inner(&mut self, namespace: String) {
+  pub async fn add_ns(&mut self, namespace: String) {
     info!("spawn");
     // todo: implement first state check
     let tx = self.tx.clone();
     let ns = namespace.clone();
     // todo: handle JoinHandle
     let handler = tokio::spawn(async move {
-      let client = Client::try_default().await.unwrap();
+      let client = match Client::try_default().await {
+          Ok(v) => v,
+          Err(e) => {warn!("failed creating client {}", e); return},
+      };
       let deployments: Api<Deployment> = Api::namespaced(client, &namespace);
-      info!("starting watcher");
+      info!("starting watcher for ns {}", namespace.clone());
       let watch = watcher(deployments, ListParams::default())
         .try_for_each(|e| async {
           debug!("got watch event");
