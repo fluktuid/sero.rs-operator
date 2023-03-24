@@ -1,0 +1,18 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: {{ include "chart.fullname" . }}
+  labels:
+    {{- include "chart.labels" . | nindent 4 }}
+data:
+  config.yml: |
+    namespaces: {{ .Values.watchedNamespaces | toYaml | nindent 6 }}
+    defaultConfig:
+      image: ghcr.io/fluktuid/sero.rs:latest
+      inject: true
+      protocol: TCP
+      port: 80
+      timeout:
+        forward: 2000
+        scaleUp: 7000
+        scaleDown: 7000

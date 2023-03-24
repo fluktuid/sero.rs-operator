@@ -1,0 +1,22 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "chart.serviceAccountName" . }}:namespaces
+rules:
+- apiGroups: [""] # "" indicates the core API group
+  resources: ["namespaces"]
+  verbs: ["get", "watch", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+# This cluster role binding allows anyone in the "manager" group to read secrets in any namespace.
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "chart.serviceAccountName" . }}-namespaces
+subjects:
+- kind: ServiceAccount
+  name: {{ include "chart.serviceAccountName" . }}
+  namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: ClusterRole
+  name: {{ include "chart.serviceAccountName" . }}:namespaces
+  apiGroup: rbac.authorization.k8s.io
