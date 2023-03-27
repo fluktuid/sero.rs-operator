@@ -9,11 +9,18 @@ edition = "2021"
 anyhow = "1.0"
 config = "0.13.3"
 k8s-openapi = { version = "0.17.0", features = ["v1_26"] }
-kube = { version = "0.80", features = ["runtime", "derive", "client"] }
+kube = { version = "0.80", default-features = false, features = ["runtime", "client", "rustls-tls"] }
 serde = { version = "1.0.155", features = ["derive"] }
 serde_json = "1.0"
 tokio = { version = "1.0", features = ["full"] }
 tracing = "0.1"
 tracing-subscriber = "0.3"
 futures = "0.3.27"
-thiserror = "1.0.24"
+thiserror = "1.0.40"
+
+[profile.release_container]
+inherits = "release"
+strip = true  # Automatically strip symbols from the binary.
+lto = true
+codegen-units = 1
+panic = "abort"
